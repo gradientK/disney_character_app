@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import md5 from "md5";
 import Header from "./components/ui/Header";
 import CharacterGrid from "./components/characters/CharacterGrid";
 import Search from "./components/ui/Search";
@@ -8,42 +7,30 @@ import "./App.css";
 
 const App = () => {
   const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
-
-  const base_endpoint = "https://gateway.marvel.com/";
-  const get_all_chars = "v1/public/characters";
+  const base_endpoint = "https://api.disneyapi.dev/character";
 
   useEffect(() => {
+    if (!query.trim()) {
+      setItems([]);
+      return;
+    }
+
     const fetchItems = async () => {
-      // params used for uri params to marvel api
-      const timestamp_int = Date.now();
-      const timestamp = timestamp_int.toString();
-      const pre_md5 = timestamp.concat(
-        process.env.REACT_APP_MARVEL_API_PRIVATE_KEY,
-        process.env.REACT_APP_MARVEL_API_PUBLIC_KEY
-      );
-      const md5_hash = md5(pre_md5);
-
-      // axios get request to marvel api for all characters
-      const result = await axios(
-        // GET request
-        base_endpoint.concat(
-          get_all_chars,
-          "?",
-          `nameStartsWith=${query}`,
-          "&ts=",
-          timestamp,
-          "&apikey=",
-          process.env.REACT_APP_MARVEL_API_PUBLIC_KEY,
-          "&hash=",
-          md5_hash
-        )
-      );
-
-      console.log(result.data.data.results);
-
-      setItems(result.data.data.results);
+      setIsLoading(true);
+      try {
+        const result = await axios.get(base_endpoint, {
+          params: {
+            name: query,
+            pageSize: 20
+          }
+        });
+        setItems(result.data.data || []);
+      } catch (error) {
+        console.error("Error fetching characters:", error);
+        setItems([]);
+      }
       setIsLoading(false);
     };
 
