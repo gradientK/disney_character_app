@@ -1,8 +1,8 @@
-Just a fun little project that uses the marvel.com API using React hooks and Axios.
+Just a fun little project that uses the disneyapi.dev API using React hooks and Axios.
 
 Start typing in the search bar and search for Disney characters that start with inputted letters (the API is limited to 20 results).
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/ff5f647e-6d50-4b0f-ac5e-cf9282dead90/deploy-status)](https://app.netlify.com/sites/marvelcharactersearch/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ff5f647e-6d50-4b0f-ac5e-cf9282dead90/deploy-status)](https://app.netlify.com/sites/disneycharactersearch/deploys)
 
 ### Development
 
